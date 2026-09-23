@@ -1,0 +1,13 @@
+<% state = event.today? ? "today" : (event.past? ? "past" : "upcoming") %>
+<%= link_to event_path(event), class: "meetup-card #{state}" do %>
+  <span class="meetup-date"><%= event.starts_at.strftime("%b %-d") %></span>
+  <span>
+    <span class="meetup-title"><%= event.title %></span>
+    <span class="meetup-meta">
+      <%= event.starts_at.strftime("%H:%M") %><%= " · #{event.location}" if event.location.present? %><%= " · #{event.attending_count} attending" if event.attending_count > 0 %>
+    </span>
+  </span>
+  <span class="meetup-badge">
+    <% if event.today? %>● today<% elsif event.past? %>past<% else %>● next<% end %>
+  </span>
+<% end %>

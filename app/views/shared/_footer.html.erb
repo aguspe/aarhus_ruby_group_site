@@ -1,0 +1,11 @@
+<footer>
+  <div class="footer-inner">
+    <div><span style="color:var(--ruby)">$</span> exit 0 &middot; Aarhus Ruby Meetup &middot; made with Ruby in Aarhus &middot; 2023–<%= Date.current.year %></div>
+    <div class="footer-links">
+      <%= link_to "meetups", events_path %>
+      <a href="https://join.slack.com/t/aarhusrubygroup/shared_invite/zt-3rctaed6s-RIR6JbaaW6iy0_e9QzbWzw" target="_blank" rel="noopener">slack</a>
+      <a href="<%= root_path(anchor: 'organizer') %>">organizer</a>
+      <a href="https://nilcheck.dev" target="_blank" rel="noopener">nilcheck.dev</a>
+    </div>
+  </div>
+</footer>
