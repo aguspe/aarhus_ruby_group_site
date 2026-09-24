@@ -24,3 +24,5 @@ services:
         value: "1"
       - key: RAILS_SERVE_STATIC_FILES
         value: "1"
+      - key: SOLID_QUEUE_IN_PUMA
+        value: "1"

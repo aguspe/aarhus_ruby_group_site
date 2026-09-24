@@ -3,5 +3,6 @@ set -o errexit
 
 bundle install
 bundle exec rails assets:precompile
-bundle exec rails db:migrate
+bundle exec rails db:prepare
+bundle exec rails db:solid:prepare
 bundle exec rails db:seed

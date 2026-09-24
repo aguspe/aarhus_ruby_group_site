@@ -85,20 +85,17 @@ test:
 # for a full overview on how database connection configuration can be specified.
 #
 production:
+  # Render free tier gives a single Postgres database, so cache/queue/cable
+  # all share the primary connection via DATABASE_URL.
   primary: &primary_production
     <<: *default
-    database: aarhus_ruby_group_production
-    username: aarhus_ruby_group
-    password: <%= ENV["AARHUS_RUBY_GROUP_DATABASE_PASSWORD"] %>
+    url: <%= ENV["DATABASE_URL"] %>
   cache:
     <<: *primary_production
-    database: aarhus_ruby_group_production_cache
     migrations_paths: db/cache_migrate
   queue:
     <<: *primary_production
-    database: aarhus_ruby_group_production_queue
     migrations_paths: db/queue_migrate
   cable:
     <<: *primary_production
-    database: aarhus_ruby_group_production_cable
     migrations_paths: db/cable_migrate

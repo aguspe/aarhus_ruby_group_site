@@ -1,5 +1,5 @@
 # Create admin member
-admin = Member.find_or_create_by!(email: "augustin@aarhusrubygroup.com") do |m|
+admin = Member.find_or_create_by!(email: "augustin.gbpe@gmail.com") do |m|
   m.name = "Augustin Gottlieb"
   m.admin = true
 end
