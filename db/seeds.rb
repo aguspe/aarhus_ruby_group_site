@@ -25,4 +25,13 @@ Event.find_or_create_by!(slug: "ruby-and-ai-what-is-the-role-of-ruby-in-the-new-
   e.published = true
 end
 
+Event.find_or_create_by!(slug: "making-desktop-apps-with-rails") do |e|
+  e.title = "Making Desktop Apps with Rails"
+  e.description = "Learn how to build desktop applications with Rails."
+  e.location = "Dentsu Cantine"
+  e.address = "Åboulevarden 18, 8000 Aarhus"
+  e.starts_at = DateTime.new(2026, 10, 27, 17, 0, 0)
+  e.published = true
+end
+
 puts "Seeded #{Event.count} events."
