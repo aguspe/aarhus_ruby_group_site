@@ -320,6 +320,9 @@ footer { margin-top: 32px; border-top: 1px solid var(--line); }
 .rsvp-status { font-size: 14px; color: var(--grn); }
 .rsvp-status.mut { color: var(--mut); }
 .rsvp-status a { color: var(--fg); text-decoration: underline; }
+.rsvp-status:empty, .rsvp-error:empty { display: none; }
+.rsvp-error { color: var(--ruby); }
+.rsvp-form .form-group input[aria-invalid="true"], .rsvp-form .form-group textarea[aria-invalid="true"] { border-color: var(--ruby); }
 @media (min-width: 900px) {
   .rsvp-buttons { flex-direction: row; }
   .rsvp-buttons .btn-primary, .rsvp-buttons .btn-secondary, .rsvp-buttons .btn-danger { width: auto; }

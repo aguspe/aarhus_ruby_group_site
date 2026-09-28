@@ -51,7 +51,42 @@
             <p class="rsvp-status mut" style="margin-top:14px">=&gt; :maybe  # we'll keep a chair warm</p>
           <% end %>
         <% else %>
-          <p class="rsvp-status mut" style="margin-top:12px"><%= link_to "Log in", login_path %> with a magic link to RSVP — no password.</p>
+          <form id="rsvp-form" class="rsvp-form" action="https://formspree.io/f/mojylkgo" method="POST" data-turbo="false" style="margin-top:16px">
+            <input type="hidden" name="_subject" value="New RSVP — <%= @event.starts_at.strftime("%B %-d") %> Aarhus Ruby meetup">
+            <input type="hidden" name="event" value="<%= @event.title %> — <%= @event.starts_at.strftime("%B %-d, %Y") %>">
+            <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="display:none">
+
+            <div class="form-group">
+              <label for="rsvp-name">name</label>
+              <input id="rsvp-name" type="text" name="name" required autocomplete="name" data-fs-field>
+              <span class="form-hint rsvp-error" data-fs-error="name"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="rsvp-email">email</label>
+              <input id="rsvp-email" type="email" name="email" required autocomplete="email" data-fs-field>
+              <span class="form-hint rsvp-error" data-fs-error="email"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="rsvp-message">message <span class="mut">(optional)</span></label>
+              <textarea id="rsvp-message" name="message" placeholder="Topics you're curious about, dietary needs, etc." data-fs-field></textarea>
+              <span class="form-hint rsvp-error" data-fs-error="message"></span>
+            </div>
+
+            <p class="rsvp-status" data-fs-success role="status" aria-live="polite"></p>
+            <p class="rsvp-status rsvp-error" data-fs-error role="alert" aria-live="polite"></p>
+
+            <div class="rsvp-buttons">
+              <button type="submit" class="btn-primary" data-fs-submit-btn>Count me in →</button>
+            </div>
+          </form>
+
+          <script>
+            window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
+            formspree('initForm', { formElement: '#rsvp-form', formId: 'mojylkgo' });
+          </script>
+          <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
         <% end %>
       <% end %>
 
@@ -64,7 +99,7 @@
         </div>
       <% end %>
 
-      <p class="prm" style="margin-top:14px;font-size:12.5px"># door closed? ping <a href="https://join.slack.com/t/aarhusrubygroup/shared_invite/zt-3rctaed6s-RIR6JbaaW6iy0_e9QzbWzw" target="_blank" rel="noopener">Slack</a> or Augustin on <a href="https://www.linkedin.com/in/augustin-gottlieb-pequeno/" target="_blank" rel="noopener">LinkedIn</a></p>
+      <p class="prm" style="margin-top:14px;font-size:12.5px"># door closed? ping <a href="https://join.slack.com/t/aarhusrubygroup/shared_invite/zt-4bbzwzzok-cEvRvcpFspxxPc8RxszkOQ" target="_blank" rel="noopener">Slack</a> or Augustin on <a href="https://www.linkedin.com/in/augustin-gottlieb-pequeno/" target="_blank" rel="noopener">LinkedIn</a></p>
     </div>
 
     <div style="margin-top:24px"><%= link_to "← all meetups", events_path, class: "prm" %></div>
