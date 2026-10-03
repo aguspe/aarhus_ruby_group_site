@@ -1,0 +1,20 @@
+<nav>
+  <a class="nav-logo" href="<%= root_path %>">
+    <%= render "shared/gem_svg", prefix: "n", size: 22 %>
+    <span class="nav-name"><span class="ok">~</span>/aarhus-ruby <span class="cur">$</span></span>
+  </a>
+  <ul class="nav-links">
+    <li class="nav-desktop"><%= link_to "$ ls schedule", events_path %></li>
+    <li class="nav-desktop"><%= link_to "$ whoami", root_path(anchor: "organizer") %></li>
+    <li class="nav-desktop"><%= link_to "$ propose talk", root_path(anchor: "speak") %></li>
+    <% if Current.member %>
+      <li class="nav-desktop"><span class="nav-user"><%= Current.member.name %></span></li>
+      <li class="nav-desktop"><%= button_to "logout", logout_path, method: :delete, class: "nav-logout" %></li>
+    <% else %>
+      <li class="nav-desktop"><%= link_to "login", login_path, class: "nav-login" %></li>
+    <% end %>
+    <li>
+      <a class="nav-slack" href="https://join.slack.com/t/aarhusrubygroup/shared_invite/zt-4bbzwzzok-cEvRvcpFspxxPc8RxszkOQ" target="_blank" rel="noopener">slack ↗</a>
+    </li>
+  </ul>
+</nav>

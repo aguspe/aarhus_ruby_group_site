@@ -1,0 +1,25 @@
+<% content_for :title, "Log in — Aarhus Ruby Meetup" %>
+<section class="login-page">
+  <div class="card login-card">
+    <div class="prm"><b>$</b> login --magic-link</div>
+    <h2>Log in</h2>
+    <p>Enter your email and we'll send you a magic link — no password needed.</p>
+
+    <%= form_with url: login_path, method: :post do |f| %>
+      <div class="form-group">
+        <%= f.label :email, "email" %>
+        <%= f.email_field :email, value: @email, placeholder: "you@example.com", autofocus: true, required: true, autocomplete: "email" %>
+      </div>
+
+      <% if @needs_name %>
+        <div class="form-group">
+          <%= f.label :name, "name" %>
+          <%= f.text_field :name, placeholder: "Jane Doe", required: true, autocomplete: "name" %>
+          <p class="form-hint"># first time here? we just need your name.</p>
+        </div>
+      <% end %>
+
+      <%= f.submit "Send magic link →", class: "btn-primary btn-block" %>
+    <% end %>
+  </div>
+</section>

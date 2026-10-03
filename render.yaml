@@ -1,0 +1,28 @@
+databases:
+  - name: aarhus-ruby-group-db
+    plan: free
+    databaseName: aarhus_ruby_group_production
+    user: aarhus_ruby_group
+
+services:
+  - type: web
+    plan: free
+    name: aarhus-ruby-group
+    runtime: ruby
+    buildCommand: "./bin/render-build.sh"
+    startCommand: "bundle exec puma -C config/puma.rb"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: aarhus-ruby-group-db
+          property: connectionString
+      - key: RAILS_MASTER_KEY
+        sync: false
+      - key: RAILS_ENV
+        value: production
+      - key: RAILS_LOG_TO_STDOUT
+        value: "1"
+      - key: RAILS_SERVE_STATIC_FILES
+        value: "1"
+      - key: SOLID_QUEUE_IN_PUMA
+        value: "1"

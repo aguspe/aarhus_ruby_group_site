@@ -1,0 +1,30 @@
+<% content_for :title, "Meetups — Aarhus Ruby Meetup" %>
+<section class="page">
+  <div class="wrap">
+    <div class="prm"><b>$</b> ls schedule/ --all</div>
+    <h1 class="disp page-title">All meetups</h1>
+    <p class="page-sub">Every meetup past, present, and future.</p>
+
+    <% if @upcoming_events.any? %>
+      <div class="prm group-label"><span class="ok">=&gt;</span> upcoming</div>
+      <div class="meetup-list">
+        <% @upcoming_events.each do |event| %>
+          <%= render "events/card", event: event %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if @past_events.any? %>
+      <div class="prm group-label"><span class="ok">=&gt;</span> past</div>
+      <div class="meetup-list">
+        <% @past_events.each do |event| %>
+          <%= render "events/card", event: event %>
+        <% end %>
+      </div>
+    <% end %>
+
+    <% if @upcoming_events.none? && @past_events.none? %>
+      <div class="meetup-list"><div class="meetup-empty">nil — no meetups published yet</div></div>
+    <% end %>
+  </div>
+</section>

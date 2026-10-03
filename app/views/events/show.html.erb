@@ -1,0 +1,107 @@
+<% content_for :title, "#{@event.title} — Aarhus Ruby Meetup" %>
+<section class="page">
+  <div class="wrap event-show-inner">
+    <div class="prm"><b>$</b> cat schedule/<%= @event.slug %></div>
+    <h1 class="disp"><%= @event.title %></h1>
+
+    <div class="event-facts">
+      <div class="card event-fact">
+        <div class="k">when</div>
+        <div class="v"><%= @event.starts_at.strftime("%-d %b · %H:%M") %></div>
+        <div class="s"><%= @event.starts_at.strftime("%A, %Y") %></div>
+      </div>
+      <div class="card event-fact">
+        <div class="k">where</div>
+        <div class="v"><%= @event.location.presence || "tba" %></div>
+        <% if @event.address.present? %><div class="s"><%= @event.address %></div><% end %>
+      </div>
+    </div>
+
+    <% if @event.capacity.present? %>
+      <div class="prm" style="margin-top:12px"># <%= @event.attending_count %>/<%= @event.capacity %> spots taken</div>
+    <% end %>
+
+    <% if @event.description.present? %>
+      <div class="event-description"><%= simple_format(@event.description) %></div>
+    <% end %>
+
+    <!-- RSVP -->
+    <div class="card event-rsvp-section">
+      <%= turbo_frame_tag "rsvp" do %>
+        <div class="prm"><b>$</b> rsvp --event <%= @event.starts_at.to_date %></div>
+        <h3>Save your spot</h3>
+
+        <% if @event.past? %>
+          <p class="rsvp-status mut" style="margin-top:12px">=&gt; :past  # this meetup already happened</p>
+        <% elsif Current.member %>
+          <div class="rsvp-buttons">
+            <% if @rsvp.nil? || !@rsvp.yes? %>
+              <%= button_to "Count me in →", event_rsvp_path(@event, status: :yes), method: :post, class: "btn-primary" %>
+            <% end %>
+            <% if @rsvp.nil? || !@rsvp.maybe? %>
+              <%= button_to "Maybe", event_rsvp_path(@event, status: :maybe), method: :post, class: "btn-secondary" %>
+            <% end %>
+            <% if @rsvp.present? %>
+              <%= button_to "Cancel RSVP", event_rsvp_path(@event), method: :delete, class: "btn-danger" %>
+            <% end %>
+          </div>
+          <% if @rsvp&.yes? %>
+            <p class="rsvp-status" style="margin-top:14px">✓ rsvp saved — see you <%= @event.starts_at.strftime("%-d %b") %></p>
+          <% elsif @rsvp&.maybe? %>
+            <p class="rsvp-status mut" style="margin-top:14px">=&gt; :maybe  # we'll keep a chair warm</p>
+          <% end %>
+        <% else %>
+          <form id="rsvp-form" class="rsvp-form" action="https://formspree.io/f/mojylkgo" method="POST" data-turbo="false" style="margin-top:16px">
+            <input type="hidden" name="_subject" value="New RSVP — <%= @event.starts_at.strftime("%B %-d") %> Aarhus Ruby meetup">
+            <input type="hidden" name="event" value="<%= @event.title %> — <%= @event.starts_at.strftime("%B %-d, %Y") %>">
+            <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="display:none">
+
+            <div class="form-group">
+              <label for="rsvp-name">name</label>
+              <input id="rsvp-name" type="text" name="name" required autocomplete="name" data-fs-field>
+              <span class="form-hint rsvp-error" data-fs-error="name"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="rsvp-email">email</label>
+              <input id="rsvp-email" type="email" name="email" required autocomplete="email" data-fs-field>
+              <span class="form-hint rsvp-error" data-fs-error="email"></span>
+            </div>
+
+            <div class="form-group">
+              <label for="rsvp-message">message <span class="mut">(optional)</span></label>
+              <textarea id="rsvp-message" name="message" placeholder="Topics you're curious about, dietary needs, etc." data-fs-field></textarea>
+              <span class="form-hint rsvp-error" data-fs-error="message"></span>
+            </div>
+
+            <p class="rsvp-status" data-fs-success role="status" aria-live="polite"></p>
+            <p class="rsvp-status rsvp-error" data-fs-error role="alert" aria-live="polite"></p>
+
+            <div class="rsvp-buttons">
+              <button type="submit" class="btn-primary" data-fs-submit-btn>Count me in →</button>
+            </div>
+          </form>
+
+          <script>
+            window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
+            formspree('initForm', { formElement: '#rsvp-form', formId: 'mojylkgo' });
+          </script>
+          <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
+        <% end %>
+      <% end %>
+
+      <% if @attendees.any? %>
+        <div class="attendee-list">
+          <span class="prm"># <%= @attendees.count %> attending</span>
+          <% @attendees.each do |rsvp| %>
+            <span class="attendee-chip"><%= rsvp.member.name %></span>
+          <% end %>
+        </div>
+      <% end %>
+
+      <p class="prm" style="margin-top:14px;font-size:12.5px"># door closed? ping <a href="https://join.slack.com/t/aarhusrubygroup/shared_invite/zt-4bbzwzzok-cEvRvcpFspxxPc8RxszkOQ" target="_blank" rel="noopener">Slack</a> or Augustin on <a href="https://www.linkedin.com/in/augustin-gottlieb-pequeno/" target="_blank" rel="noopener">LinkedIn</a></p>
+    </div>
+
+    <div style="margin-top:24px"><%= link_to "← all meetups", events_path, class: "prm" %></div>
+  </div>
+</section>
