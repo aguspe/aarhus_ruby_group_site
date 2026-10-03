@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+  <meta name="color-scheme" content="dark light" />
+  <meta name="theme-color" content="#0c0e11" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#f7f6f2" media="(prefers-color-scheme: light)" />
+  <title>Aarhus Ruby Meetup</title>
+  <meta name="description" content="Monthly meetups for Ruby developers of all levels in Aarhus, Denmark" />
+  <link rel="icon" href="/icon.svg" type="image/svg+xml" />
+  <link rel="icon" href="/icon.png" type="image/png" />
+  <link rel="apple-touch-icon" href="/icon.png" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:ital,wght@0,400;0,500;0,700;1,400&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet" />
+
+  <style>
+    /* ── Aarhus Ruby Meetup · terminal-native identity ─────────────
+       Mobile-first. Dark by default, light via system preference.
+       Fonts: JetBrains Mono (UI) + Space Grotesk (display). */
+
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    [hidden] { display: none !important; }
+
+    :root {
+      --bg:    #0c0e11;
+      --bg2:   #14171b;
+      --bg3:   #1c2026;
+      --line:  rgba(255,255,255,.11);
+      --fg:    #ecebe6;
+      --mut:   #a09e96;
+      --ruby:  #ee5d6e;
+      --fill:  #b82a3a;
+      --grn:   #6cc985;
+      --amb:   #e0b054;
+      --mono:  'JetBrains Mono', ui-monospace, Menlo, monospace;
+      --disp:  'Space Grotesk', system-ui, sans-serif;
+      color-scheme: dark;
+    }
+
+    @media (prefers-color-scheme: light) {
+      :root {
+        --bg:   #f7f6f2;
+        --bg2:  #ffffff;
+        --bg3:  #efede8;
+        --line: rgba(0,0,0,.11);
+        --fg:   #17181b;
+        --mut:  #66655f;
+        --ruby: #b82a3a;
+        --fill: #b82a3a;
+        --grn:  #247a3f;
+        --amb:  #8a5e0d;
+        color-scheme: light;
+      }
+    }
+
+    html { scroll-behavior: smooth; scroll-padding-top: 72px; }
+
+    body {
+      font-family: var(--mono);
+      font-size: 15px;
+      line-height: 1.5;
+      background: var(--bg);
+      color: var(--fg);
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+    }
+
+    a { color: var(--fg); text-decoration: none; }
+    a:hover { color: var(--ruby); }
+    code { font-family: var(--mono); color: var(--amb); }
+
+    /* ── Primitives ─────────────────────────────────────────── */
+    .wrap { max-width: 1120px; margin: 0 auto; padding-left: 18px; padding-right: 18px; }
+    @media (min-width: 900px) { .wrap { padding-left: 40px; padding-right: 40px; } }
+
+    .prm { font-size: 13px; color: var(--mut); }
+    .prm b { color: var(--ruby); font-weight: 400; }
+    .ok { color: var(--grn); }
+    .cur { color: var(--fg); font-weight: 700; }
+
+    .disp { font-family: var(--disp); font-weight: 700; letter-spacing: -.02em; line-height: 1.02; }
+
+    .card { background: var(--bg2); border: 1px solid var(--line); border-radius: 14px; }
+
+    .sec { padding-top: 28px; }
+    @media (min-width: 900px) { .sec { padding-top: 56px; } }
+
+    /* ── Buttons ─────────────────────────────────────────────── */
+    .btn-primary, .btn-secondary {
+      display: inline-flex; align-items: center; justify-content: center; gap: .5rem;
+      min-height: 52px; padding: 0 20px; border-radius: 12px;
+      font-family: var(--mono); font-size: 15px; cursor: pointer; text-decoration: none;
+      transition: background .15s, border-color .15s, color .15s;
+    }
+    .btn-primary { background: var(--fill); color: #fff; font-weight: 700; border: 0; }
+    .btn-primary:hover { background: var(--ruby); color: #fff; }
+    .btn-primary:disabled { opacity: .6; cursor: progress; }
+    .btn-secondary { background: transparent; color: var(--fg); border: 1px solid var(--line); min-height: 48px; font-size: 14px; }
+    .btn-secondary:hover { border-color: var(--ruby); color: var(--ruby); }
+    .btn-pill { min-height: 44px; padding: 0 14px; border-radius: 999px; font-size: 13px; }
+
+    /* ── NAV ─────────────────────────────────────────────────── */
+    nav {
+      position: sticky; top: 0; z-index: 100;
+      display: flex; align-items: center; justify-content: space-between; gap: 12px;
+      height: 60px; padding: 0 18px;
+      background: var(--bg); border-bottom: 1px solid var(--line);
+    }
+    @media (min-width: 900px) { nav { height: 64px; padding: 0 40px; } }
+
+    .nav-logo { display: flex; align-items: center; gap: 10px; }
+    .nav-logo svg { width: 22px; height: 22px; flex: none; }
+    .nav-name { font-size: 13px; color: var(--mut); white-space: nowrap; }
+
+    .nav-links { display: flex; align-items: center; gap: 22px; list-style: none; }
+    .nav-links a { font-size: 13.5px; }
+    .nav-links .nav-desktop { display: none; }
+    @media (min-width: 900px) { .nav-links .nav-desktop { display: block; } }
+
+    .nav-slack {
+      display: inline-flex; align-items: center; gap: 6px;
+      height: 36px; padding: 0 12px;
+      border: 1px solid var(--line); border-radius: 999px;
+      font-size: 12px !important;
+    }
+    .nav-slack:hover { border-color: var(--ruby); }
+
+    /* ── Bottom tab bar (mobile) ─────────────────────────────── */
+    .tabbar {
+      position: sticky; bottom: 0; z-index: 90;
+      display: flex;
+      background: var(--bg); border-top: 1px solid var(--line);
+      padding: 6px 8px calc(6px + env(safe-area-inset-bottom));
+    }
+    .tabbar a {
+      flex: 1;
+      display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
+      height: 48px; font-size: 11.5px; color: var(--mut);
+    }
+    .tabbar a i { width: 8px; height: 8px; border-radius: 2px; border: 1.5px solid currentColor; }
+    .tabbar a:hover { color: var(--ruby); }
+    @media (min-width: 900px) { .tabbar { display: none; } }
+
+    /* ── HERO ────────────────────────────────────────────────── */
+    .hero { padding: 26px 0 8px; }
+    .hero-word { margin-top: 18px; }
+    .hero-word .kicker { font-family: var(--disp); font-weight: 500; font-size: 22px; color: var(--mut); line-height: 1; }
+    .hero-word .big { font-size: clamp(52px, 14vw, 112px); }
+    .hero-tagline { margin-top: 16px; max-width: 34ch; text-wrap: pretty; }
+    .hero-note { margin-top: 10px; }
+
+    .hero-grid { display: grid; gap: 22px; }
+    @media (min-width: 900px) {
+      .hero { padding: 72px 0 64px; }
+      .hero-grid { grid-template-columns: 1.2fr 1fr; gap: 56px; align-items: end; }
+      .hero-word { margin-top: 22px; }
+      .hero-word .kicker { font-size: 30px; }
+      .hero-tagline { font-size: 18px; max-width: 38ch; margin-top: 22px; }
+    }
+
+    /* next meetup card */
+    .next { padding: 18px; }
+    .next-head { display: flex; justify-content: space-between; font-size: 12px; color: var(--mut); }
+    .next-date { font-size: 34px; margin-top: 12px; }
+    .next-date span { color: var(--mut); font-weight: 500; }
+    .next-title { font-size: 17px; font-weight: 500; margin-top: 10px; text-wrap: pretty; }
+    .next-where { margin-top: 4px; }
+    .next-actions { display: flex; flex-direction: column; gap: 10px; margin-top: 18px; }
+    @media (min-width: 900px) {
+      .next { padding: 26px; }
+      .next-date { font-size: 40px; margin-top: 14px; }
+      .next-title { font-size: 19px; }
+      .next-actions { display: grid; grid-template-columns: 1fr auto; }
+    }
+
+    /* quick commands */
+    .cmds { display: flex; gap: 10px; overflow-x: auto; scrollbar-width: none; padding-top: 26px; }
+    .cmds::-webkit-scrollbar { display: none; }
+    .cmds a { flex: none; }
+    @media (min-width: 900px) { .cmds { display: none; } }
+
+    /* ── Two-column body on desktop ─────────────────────────── */
+    .cols { display: grid; }
+    @media (min-width: 900px) {
+      .cols { grid-template-columns: 1fr 1fr; gap: 56px; padding-top: 56px; padding-bottom: 56px; border-top: 1px solid var(--line); }
+      .cols > div > .sec:first-child { padding-top: 0; }
+    }
+
+    /* ── Meetup cards ───────────────────────────────────────── */
+    .group-label { margin-top: 18px; }
+    .meetup-list { display: flex; flex-direction: column; margin-top: 8px; border-top: 1px solid var(--line); }
+    .meetup-list:empty { display: none; }
+
+    .meetup-card {
+      display: grid;
+      grid-template-columns: 60px minmax(0,1fr) auto;
+      gap: 12px;
+      align-items: start;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--line);
+      color: var(--mut);
+    }
+    .meetup-date { font-size: 13px; padding-top: 1px; }
+    .meetup-title { font-size: 14px; font-weight: 500; text-wrap: pretty; }
+    .meetup-meta { font-size: 12px; margin-top: 2px; }
+    .meetup-desc { font-size: 13px; margin-top: 6px; text-wrap: pretty; }
+    .meetup-badge { font-size: 11px; white-space: nowrap; padding-top: 2px; }
+
+    .meetup-card.upcoming { color: var(--fg); }
+    .meetup-card.upcoming .meetup-date, .meetup-card.upcoming .meetup-badge { color: var(--grn); }
+    .meetup-card.upcoming .meetup-meta, .meetup-card.upcoming .meetup-desc { color: var(--mut); }
+    .meetup-card.today .meetup-date, .meetup-card.today .meetup-badge { color: var(--amb); }
+    .meetup-card.past .meetup-desc { display: none; }
+
+    @media (min-width: 900px) {
+      .meetup-card { grid-template-columns: 72px minmax(0,1fr) auto; }
+      .meetup-title { font-size: 15px; }
+    }
+
+    .meetup-empty { padding: 14px 0; font-size: 14px; color: var(--amb); border-bottom: 1px solid var(--line); }
+
+    /* ── RSVP ───────────────────────────────────────────────── */
+    .rsvp { margin-top: 12px; padding: 18px; }
+    .rsvp h3 { font-family: var(--disp); font-weight: 700; letter-spacing: -.02em; font-size: 24px; margin-top: 8px; text-wrap: pretty; }
+    .rsvp-sub { font-size: 13px; color: var(--mut); margin-top: 4px; }
+    .rsvp form { margin-top: 16px; }
+    .rsvp-status { font-size: 14px; color: var(--grn); margin-bottom: 12px; }
+    .rsvp-status:empty, .rsvp-error:empty { display: none; }
+    .rsvp-error { color: var(--ruby); }
+    .rsvp .btn-primary { width: 100%; }
+    .rsvp-note { margin-top: 14px; font-size: 12.5px; }
+    .rsvp-note a { text-decoration: underline; }
+    @media (min-width: 900px) { .rsvp { padding: 24px; } .rsvp .btn-primary { width: auto; } }
+
+    .form-group { margin-bottom: 12px; }
+    .form-group label { display: block; font-size: 13px; color: var(--mut); margin-bottom: 6px; }
+    .form-group label::before { content: '$ '; color: var(--ruby); }
+    .form-group input, .form-group textarea {
+      width: 100%; min-height: 52px; padding: 0 14px;
+      border: 1px solid var(--line); border-radius: 12px;
+      background: var(--bg); color: var(--fg);
+      font-family: var(--mono); font-size: 16px;
+    }
+    .form-group textarea { min-height: 110px; padding: 12px 14px; resize: vertical; }
+    .form-group input::placeholder, .form-group textarea::placeholder { color: var(--mut); }
+    .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--ruby); box-shadow: 0 0 0 3px rgba(184,42,58,.2); }
+    .form-group input[aria-invalid="true"], .form-group textarea[aria-invalid="true"] { border-color: var(--ruby); }
+    .form-hint { display: block; font-size: 12.5px; margin-top: 6px; }
+
+    /* ── Organizer ($ whoami) ───────────────────────────────── */
+    .who { margin-top: 12px; padding: 18px; }
+    .who-name { font-size: 22px; }
+    .who-bio { margin-top: 14px; font-size: 14px; color: var(--mut); text-wrap: pretty; }
+    .who-links { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px; }
+    .who-links a { min-height: 40px; padding: 0 12px; font-size: 12.5px; }
+    .who .btn-primary { margin-top: 14px; width: 100%; }
+    @media (min-width: 900px) { .who { padding: 24px; } .who-name { font-size: 28px; } .who-bio { font-size: 15px; } }
+
+    /* ── Community panels ────────────────────────────────────── */
+    .panels { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+    .panel { padding: 14px; }
+    .panel:hover { border-color: var(--ruby); color: var(--fg); }
+    .panel-title { font-size: 13px; font-weight: 700; margin-top: 10px; }
+    .panel-sub { font-size: 12px; color: var(--mut); }
+    .ico {
+      width: 40px; height: 40px; border-radius: 10px;
+      background: var(--bg3); border: 1px solid var(--line);
+      display: flex; align-items: center; justify-content: center;
+      color: var(--ruby);
+    }
+    .ico svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+    @media (min-width: 900px) { .panels { gap: 12px; } .panel { padding: 16px; } .panel-title { font-size: 14px; } }
+
+    /* ── Propose a talk ─────────────────────────────────────── */
+    .propose-title { font-size: 26px; margin-top: 10px; text-wrap: pretty; }
+    .propose-sub { margin-top: 8px; font-size: 14px; color: var(--mut); text-wrap: pretty; }
+    .propose .btn-secondary { margin-top: 14px; width: 100%; }
+    @media (min-width: 900px) { .propose-title { font-size: 32px; } .propose .btn-secondary { width: auto; min-width: 220px; } }
+
+    .about-lines { margin-top: 10px; font-size: 13.5px; line-height: 1.7; color: var(--mut); }
+
+    /* ── FOOTER ──────────────────────────────────────────────── */
+    footer { margin-top: 32px; border-top: 1px solid var(--line); }
+    .footer-inner { display: flex; flex-direction: column; gap: 12px; padding: 22px 18px 28px; font-size: 12.5px; color: var(--mut); }
+    .footer-links { display: flex; flex-wrap: wrap; gap: 16px; }
+    @media (min-width: 900px) {
+      .footer-inner { flex-direction: row; justify-content: space-between; align-items: center; max-width: 1120px; margin: 0 auto; padding: 0 40px; height: 72px; }
+    }
+  </style>
+</head>
+
+<body>
+  <nav>
+    <a class="nav-logo" href="#top" aria-label="Aarhus Ruby Meetup — top">
+      <svg viewBox="0 0 360 320" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+        <defs>
+          <linearGradient id="nCT" x1="30%" y1="0%" x2="70%" y2="100%"><stop offset="0%" stop-color="#E83055"/><stop offset="100%" stop-color="#CC001A"/></linearGradient>
+          <linearGradient id="nCL" x1="100%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#C00020"/><stop offset="100%" stop-color="#8A001A"/></linearGradient>
+          <linearGradient id="nCR" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#D4122C"/><stop offset="100%" stop-color="#AA0018"/></linearGradient>
+          <linearGradient id="nPL" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#A00016"/><stop offset="100%" stop-color="#5C000C"/></linearGradient>
+          <linearGradient id="nPCL" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#8E0014"/><stop offset="100%" stop-color="#4A0008"/></linearGradient>
+          <linearGradient id="nPCR" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#B4001C"/><stop offset="100%" stop-color="#700010"/></linearGradient>
+          <linearGradient id="nPR" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="#960014"/><stop offset="100%" stop-color="#580008"/></linearGradient>
+        </defs>
+        <polygon points="78,112 124,150 180,310" fill="url(#nPL)"/>
+        <polygon points="124,150 180,150 180,310" fill="url(#nPCL)"/>
+        <polygon points="236,150 180,150 180,310" fill="url(#nPCR)"/>
+        <polygon points="282,112 236,150 180,310" fill="url(#nPR)"/>
+        <polygon points="180,28 78,112 180,150" fill="url(#nCL)"/>
+        <polygon points="180,28 282,112 180,150" fill="url(#nCR)"/>
+        <polygon points="180,28 78,112 282,112" fill="url(#nCT)"/>
+        <polygon points="180,36 194,58 180,80 166,58" fill="#FFE8ED" opacity="0.75"/>
+      </svg>
+      <span class="nav-name"><span class="ok">~</span>/aarhus-ruby <span class="cur">$</span></span>
+    </a>
+    <ul class="nav-links">
+      <li class="nav-desktop"><a href="#meetups">$ ls schedule</a></li>
+      <li class="nav-desktop"><a href="#organizer">$ whoami</a></li>
+      <li class="nav-desktop"><a href="#speak">$ propose talk</a></li>
+      <li><a class="nav-slack" href="https://join.slack.com/t/aarhusrubygroup/shared_invite/zt-4bbzwzzok-cEvRvcpFspxxPc8RxszkOQ" target="_blank" rel="noopener">slack ↗</a></li>
+    </ul>
+  </nav>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="wrap hero-grid">
+        <div>
+          <div class="prm"><b>$</b> ruby aarhus.rb</div>
+          <div class="hero-word">
+            <div class="kicker">Aarhus</div>
+            <h1 class="disp big">RUBY<br>MEETUP</h1>
+          </div>
+          <p class="hero-tagline">Monthly meetups for Ruby developers of all levels.</p>
+          <div class="prm hero-note"># monthly &middot; Dentsu Aarhus, Åboulevarden 18, 2nd floor &middot; free</div>
+        </div>
+
+        <!-- Filled in by the script below from the first upcoming meetup card. -->
+        <div class="card next" id="next-meetup">
+          <div class="next-head"><span class="ok">=&gt; next_meetup</span><span id="next-when">nil</span></div>
+          <div class="disp next-date" id="next-date" hidden></div>
+          <div class="next-title" id="next-title">Next date coming soon — join Slack to hear first.</div>
+          <div class="prm next-where" id="next-where"></div>
+          <div class="next-actions">
+            <a class="btn-primary" id="next-cta" href="https://join.slack.com/t/aarhusrubygroup/shared_invite/zt-4bbzwzzok-cEvRvcpFspxxPc8RxszkOQ" target="_blank" rel="noopener">Join Slack ↗</a>
+            <a class="btn-secondary" href="#meetups">Schedule</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="wrap cmds">
+        <a class="btn-secondary btn-pill" href="#meetups">$ ls schedule</a>
+        <a class="btn-secondary btn-pill" href="#organizer">$ whoami</a>
+        <a class="btn-secondary btn-pill" href="#speak">$ propose talk</a>
+      </div>
+    </section>
+
+    <div class="wrap cols">
+      <div>
+        <!-- SCHEDULE -->
+        <section class="sec" id="meetups">
+          <div class="prm"><b>$</b> ls schedule/</div>
+
+          <!--
+            ── HOW TO ADD A MEETUP ──────────────────────────────────
+            Copy a card below and edit it. Order doesn't matter: the script
+            sorts cards into "upcoming" and "past" from data-date, marks the
+            next one, and uses it for the hero card and the RSVP form.
+            data-date is local Aarhus time: YYYY-MM-DDTHH:MM
+
+            <article class="meetup-card" data-date="2026-11-24T17:00">
+              <span class="meetup-date">Nov 24</span>
+              <div>
+                <h3 class="meetup-title">Talk title</h3>
+                <p class="meetup-meta">17:00 · <span class="meetup-where">Dentsu Cantine, Åboulevarden 18</span></p>
+                <p class="meetup-desc">One or two sentences about the meetup.</p>
+              </div>
+              <span class="meetup-badge"></span>
+            </article>
+          -->
+          <div id="meetup-cards">
+            <article class="meetup-card" data-date="2026-10-27T17:00">
+              <span class="meetup-date">Oct 27</span>
+              <div>
+                <h3 class="meetup-title">Making Desktop Apps with Rails</h3>
+                <p class="meetup-meta">17:00 · <span class="meetup-where">Dentsu Cantine, Åboulevarden 18</span></p>
+                <p class="meetup-desc">Learn how to build desktop applications with Rails.</p>
+              </div>
+              <span class="meetup-badge"></span>
+            </article>
+
+            <article class="meetup-card" data-date="2026-03-31T17:00">
+              <span class="meetup-date">Mar 31</span>
+              <div>
+                <h3 class="meetup-title">Ruby and AI: What is the role of Ruby in the new AI world?</h3>
+                <p class="meetup-meta">17:00 · <span class="meetup-where">Merkle Cantine, Åboulevarden 18</span></p>
+                <p class="meetup-desc">Ruby-based AI tools, integrations with AI APIs, and the future of Ruby in an AI-first world.</p>
+              </div>
+              <span class="meetup-badge"></span>
+            </article>
+
+            <article class="meetup-card" data-date="2026-02-28T13:30">
+              <span class="meetup-date">Feb 28</span>
+              <div>
+                <h3 class="meetup-title">Kick-Off: Start of the Year Edition</h3>
+                <p class="meetup-meta">13:30 · <span class="meetup-where">LYNfabrikken, Vestergade 49B</span></p>
+                <p class="meetup-desc">Our first meetup of 2026 — meet fellow Ruby enthusiasts in Aarhus and kick off the new year together.</p>
+              </div>
+              <span class="meetup-badge"></span>
+            </article>
+          </div>
+
+          <div class="prm group-label" id="upcoming-label" hidden><span class="ok">=&gt;</span> upcoming</div>
+          <div class="meetup-list" id="upcoming-list"></div>
+          <div class="meetup-list" id="upcoming-empty" hidden><div class="meetup-empty">tba — your talk? <a href="#speak">propose one →</a></div></div>
+          <div class="prm group-label" id="past-label" hidden><span class="ok">=&gt;</span> past</div>
+          <div class="meetup-list" id="past-list"></div>
+        </section>
+
+        <!-- RSVP -->
+        <section class="sec" id="rsvp" hidden>
+          <div class="prm"><b>$</b> rsvp --event <span id="rsvp-date"></span></div>
+          <div class="card rsvp">
+            <h3 id="rsvp-title">Save your spot</h3>
+            <p class="rsvp-sub" id="rsvp-sub"></p>
+
+            <form id="rsvp-form" action="https://formspree.io/f/mojylkgo" method="POST">
+              <input type="hidden" name="_subject" id="rsvp-subject" value="New RSVP — Aarhus Ruby meetup" />
+              <input type="hidden" name="event" id="rsvp-event" value="" />
+              <input type="text" name="_gotcha" tabindex="-1" autocomplete="off" style="display:none" />
+
+              <div class="form-group">
+                <label for="rsvp-name">name</label>
+                <input id="rsvp-name" type="text" name="name" required autocomplete="name" data-fs-field />
+                <span class="form-hint rsvp-error" data-fs-error="name"></span>
+              </div>
+
+              <div class="form-group">
+                <label for="rsvp-email">email</label>
+                <input id="rsvp-email" type="email" name="email" required autocomplete="email" data-fs-field />
+                <span class="form-hint rsvp-error" data-fs-error="email"></span>
+              </div>
+
+              <div class="form-group">
+                <label for="rsvp-message">message <span class="prm">(optional)</span></label>
+                <textarea id="rsvp-message" name="message" placeholder="Topics you're curious about, dietary needs, etc." data-fs-field></textarea>
+                <span class="form-hint rsvp-error" data-fs-error="message"></span>
+              </div>
+
+              <p class="rsvp-status" data-fs-success role="status" aria-live="polite"></p>
+              <p class="rsvp-status rsvp-error" data-fs-error role="alert" aria-live="polite"></p>
+
+              <button type="submit" class="btn-primary" data-fs-submit-btn>Count me in →</button>
+            </form>
+
+            <p class="prm rsvp-note"># door closed? ping <a href="https://join.slack.com/t/aarhusrubygroup/shared_invite/zt-4bbzwzzok-cEvRvcpFspxxPc8RxszkOQ" target="_blank" rel="noopener">Slack</a> or Augustin on <a href="https://www.linkedin.com/in/augustin-gottlieb-pequeno/" target="_blank" rel="noopener">LinkedIn</a></p>
+          </div>
+        </section>
+
+        <!-- COMMUNITY -->
+        <section class="sec" id="community">
+          <div class="prm"><b>$</b> ls community/</div>
+          <div class="panels">
+            <a class="card panel" href="https://join.slack.com/t/aarhusrubygroup/shared_invite/zt-4bbzwzzok-cEvRvcpFspxxPc8RxszkOQ" target="_blank" rel="noopener">
+              <div class="ico"><svg viewBox="0 0 24 24"><path d="M4 5h16v11H9l-5 4z"/></svg></div>
+              <div class="panel-title">Slack</div>
+              <div class="panel-sub">jobs, code review, puns</div>
+            </a>
+            <a class="card panel" href="#speak">
+              <div class="ico"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4M9 21h6"/></svg></div>
+              <div class="panel-title">Speak</div>
+              <div class="panel-sub">5 or 25 min, all levels</div>
+            </a>
+            <a class="card panel" href="https://techhubaarhus.dk" target="_blank" rel="noopener">
+              <div class="ico"><svg viewBox="0 0 24 24"><path d="M3 21h18M5 21V9l7-5 7 5v12M10 21v-5h4v5"/></svg></div>
+              <div class="panel-title">Tech Hub Aarhus</div>
+              <div class="panel-sub">the wider Aarhus scene</div>
+            </a>
+            <a class="card panel" href="https://maps.google.com/?q=%C3%85boulevarden+18,+8000+Aarhus" target="_blank" rel="noopener">
+              <div class="ico"><svg viewBox="0 0 24 24"><path d="M12 21s-6-5.6-6-11a6 6 0 0 1 12 0c0 5.4-6 11-6 11z"/><circle cx="12" cy="10" r="2"/></svg></div>
+              <div class="panel-title">Venue</div>
+              <div class="panel-sub">Dentsu Aarhus &middot; Åboulevarden 18 &middot; 2nd floor</div>
+            </a>
+          </div>
+        </section>
+      </div>
+
+      <div>
+        <!-- ORGANIZER -->
+        <section class="sec" id="organizer">
+          <div class="prm"><b>$</b> whoami</div>
+          <div class="card who">
+            <div class="disp who-name">Augustin Gottlieb</div>
+            <div class="prm" style="margin-top:4px">Organizer &middot; Engineering Director QA, Merkle DK</div>
+            <p class="who-bio">Rubyist, tester, OSS contributor (Selenium, Appium). I run this meetup and write long-form on testing and Ruby at nilcheck.dev. Say hi — first-timers especially.</p>
+            <div class="who-links">
+              <a class="btn-secondary btn-pill" href="https://nilcheck.dev" target="_blank" rel="noopener">nilcheck.dev ↗</a>
+              <a class="btn-secondary btn-pill" href="https://www.linkedin.com/in/augustin-gottlieb-pequeno/" target="_blank" rel="noopener">linkedin ↗</a>
+              <a class="btn-secondary btn-pill" href="https://github.com/aguspe" target="_blank" rel="noopener">github ↗</a>
+            </div>
+            <a class="btn-primary" href="mailto:augustin.gbpe@gmail.com?subject=Aarhus%20Ruby%20Meetup">Contact Augustin</a>
+          </div>
+        </section>
+
+        <!-- PROPOSE A TALK -->
+        <section class="sec propose" id="speak">
+          <div class="prm"><b>$</b> propose --talk</div>
+          <div class="disp propose-title">Got 5 or 25 minutes of Ruby in you?</div>
+          <p class="propose-sub">First talk or fiftieth — we'll help you shape it. Lightning talks welcome.</p>
+          <a class="btn-secondary" href="mailto:augustin.gbpe@gmail.com?subject=Talk%20proposal%20%E2%80%94%20Aarhus%20Ruby%20Meetup">Propose a talk</a>
+        </section>
+
+        <!-- ABOUT -->
+        <section class="sec" id="about">
+          <div class="prm"><b>$</b> cat about.md</div>
+          <div class="about-lines">
+            <div><span class="ok">#</span> community-driven — volunteers who love Ruby and Aarhus</div>
+            <div><span class="ok">#</span> all levels — from <code>puts "hello"</code> to core contributor</div>
+            <div><span class="ok">#</span> monthly, hosted at Dentsu Aarhus</div>
+          </div>
+        </section>
+      </div>
+    </div>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div><span style="color:var(--ruby)">$</span> exit 0 &middot; Aarhus Ruby Meetup &middot; made with Ruby in Aarhus &middot; 2023–<span id="year">2026</span></div>
+      <div class="footer-links">
+        <a href="#meetups">meetups</a>
+        <a href="https://join.slack.com/t/aarhusrubygroup/shared_invite/zt-4bbzwzzok-cEvRvcpFspxxPc8RxszkOQ" target="_blank" rel="noopener">slack</a>
+        <a href="#organizer">organizer</a>
+        <a href="https://nilcheck.dev" target="_blank" rel="noopener">nilcheck.dev</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mobile-only bottom tab bar (hidden ≥900px) -->
+  <div class="tabbar">
+    <a href="#meetups"><i></i>meetups</a>
+    <a href="https://join.slack.com/t/aarhusrubygroup/shared_invite/zt-4bbzwzzok-cEvRvcpFspxxPc8RxszkOQ" target="_blank" rel="noopener"><i></i>slack</a>
+    <a href="#speak"><i></i>speak</a>
+    <a href="#organizer"><i></i>organizer</a>
+  </div>
+
+  <script>
+    (function () {
+      var DAY = 86400000;
+      var today = new Date(); today.setHours(0, 0, 0, 0);
+      var $ = function (id) { return document.getElementById(id); };
+      var text = function (el, sel) { var n = el.querySelector(sel); return n ? n.textContent.trim() : ""; };
+
+      var cards = Array.prototype.slice.call(document.querySelectorAll("#meetup-cards .meetup-card[data-date]"))
+        .map(function (el) {
+          var date = new Date(el.dataset.date);
+          var day = new Date(date); day.setHours(0, 0, 0, 0);
+          return { el: el, date: date, day: day };
+        })
+        .filter(function (c) { return !isNaN(c.date); });
+
+      var upcoming = cards.filter(function (c) { return c.day >= today; }).sort(function (a, b) { return a.date - b.date; });
+      var past = cards.filter(function (c) { return c.day < today; }).sort(function (a, b) { return b.date - a.date; });
+
+      upcoming.forEach(function (c, i) {
+        var isToday = c.day.getTime() === today.getTime();
+        c.el.classList.add(isToday ? "today" : "upcoming");
+        c.el.querySelector(".meetup-badge").textContent = isToday ? "● today" : (i === 0 ? "● next" : "upcoming");
+        $("upcoming-list").appendChild(c.el);
+      });
+      past.forEach(function (c) {
+        c.el.classList.add("past");
+        c.el.querySelector(".meetup-badge").textContent = "past";
+        $("past-list").appendChild(c.el);
+      });
+
+      $("upcoming-label").hidden = false;
+      $("upcoming-empty").hidden = upcoming.length > 0;
+      $("past-label").hidden = past.length === 0;
+
+      var next = upcoming[0];
+      if (next) {
+        var el = next.el;
+        var title = text(el, ".meetup-title");
+        var where = text(el, ".meetup-where");
+        var days = Math.round((next.day - today) / DAY);
+        var dayMonth = next.date.toLocaleDateString("en-GB", { day: "numeric", month: "short" });
+        var hhmm = next.date.toLocaleTimeString("en-GB", { hour: "2-digit", minute: "2-digit" });
+        var longDate = next.date.toLocaleDateString("en-GB", { day: "numeric", month: "long", year: "numeric" });
+
+        $("next-when").textContent = days === 0 ? "today" : days === 1 ? "tomorrow" : "in " + days + " days";
+        $("next-date").innerHTML = "";
+        $("next-date").append(dayMonth + " ");
+        var t = document.createElement("span"); t.textContent = hhmm; $("next-date").appendChild(t);
+        $("next-date").hidden = false;
+        $("next-title").textContent = title;
+        $("next-where").textContent = where;
+        var cta = $("next-cta");
+        cta.textContent = "Count me in →";
+        cta.href = "#rsvp";
+        cta.removeAttribute("target");
+        cta.removeAttribute("rel");
+
+        $("rsvp").hidden = false;
+        $("rsvp-date").textContent = el.dataset.date.slice(0, 10);
+        $("rsvp-title").textContent = "Save your spot — " + next.date.toLocaleDateString("en-GB", { day: "numeric", month: "long" });
+        $("rsvp-sub").textContent = [title, where, hhmm].filter(Boolean).join(" · ");
+        $("rsvp-subject").value = "New RSVP — " + longDate + " Aarhus Ruby meetup";
+        $("rsvp-event").value = title + " — " + longDate;
+      }
+
+      $("year").textContent = new Date().getFullYear();
+    })();
+  </script>
+
+  <script>
+    window.formspree = window.formspree || function () { (formspree.q = formspree.q || []).push(arguments); };
+    formspree('initForm', { formElement: '#rsvp-form', formId: 'mojylkgo' });
+  </script>
+  <script src="https://unpkg.com/@formspree/ajax@1" defer></script>
+</body>
+</html>
